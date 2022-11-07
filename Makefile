@@ -1,5 +1,6 @@
 CC := g++
-CXX_STANDARD := 20
+TIDY := clang-tidy
+CXX_STANDARD := 17
 BINARIES := test-suite
 
 all: ${BINARIES}
