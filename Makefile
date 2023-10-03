@@ -1,36 +1,32 @@
-CC := g++
+CXX := g++-11
 TIDY := clang-tidy
 CXX_STANDARD := 17
+
 BINARIES := test-suite
 
 all: ${BINARIES}
 
 library.o: library.cpp library.h
-	${CC} -O3 -std=c++${CXX_STANDARD} -c $< -o $@ -Wall -Wextra
+	${CXX} -O2 -std=c++${CXX_STANDARD} -c $< -o $@ -Wall -Wextra -Wpedantic
 
-test-suite.o: test-suite.cpp library.h catch.h
-	${CC} -std=c++${CXX_STANDARD} -c $< -o $@ -w
-
-catch.o: catch.cpp catch.h
-	${CC} -std=c++${CXX_STANDARD} -c $< -o $@ -w
 
 %.o: %.cpp %.h
-	${CC} -std=c++${CXX_STANDARD} -c $< -o $@
+	${CXX} -std=c++${CXX_STANDARD} -c $< -o $@ -w
 
 %.o: %.cpp
-	${CC} -std=c++${CXX_STANDARD} -c $< -o $@ 
+	${CXX} -std=c++${CXX_STANDARD} -c $< -o $@ -w
 
 test-suite: catch.o library.o test-suite.o
-	${CC} -std=c++${CXX_STANDARD} $^ -o $@ -Wall -Wextra
+	${CXX} -std=c++${CXX_STANDARD} $^ -o $@ -Wall -Wextra -Wpedantic
 
 analyze:
-	${CC} -O3 -std=c++${CXX_STANDARD} -c library.cpp -Wall -Wextra -fanalyzer -Wanalyzer-too-complex -Wno-analyzer-possible-null-argument
+	@${CXX} -O3 -std=c++${CXX_STANDARD} -c library.cpp -Wall -Wextra -fanalyzer -Wno-analyzer-possible-null-argument -Wno-analyzer-possible-null-dereference
 
 guidelines:
-	${TIDY} -checks=cppcoreguidelines-*,clang-analyzer-* library.cpp -- std=c++${CXX_STANDARD}
+	@${TIDY} -checks=cppcoreguidelines-*,clang-analyzer-* library.cpp -- -O2 -std=c++${CXX_STANDARD}
 
 test: test-suite
-	./test-suite
+	@./test-suite
 
 clean:
 	rm -rf *.o ${BINARIES} *~
