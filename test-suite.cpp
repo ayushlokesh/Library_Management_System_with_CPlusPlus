@@ -42,6 +42,7 @@ TEST_CASE("constructors and getters") {
 TEST_CASE("copy constructors") {
 
   /* Create copy of novel */
+  Novel n1 = Novel("Monstrous Regiment", "Terry Pratchett", 1);
   Novel n1b = n1;
   CHECK(n1b.getDocType() == DOC_NOVEL);
   CHECK(same(n1b.getTitle(), n1.getTitle()));
@@ -58,6 +59,7 @@ TEST_CASE("copy constructors") {
 
 
   /* Create copy of comic */
+  Comic c1 = Comic("Watchmen", "Alan Moore", 1, 10);
   Comic c1b = c1;
   CHECK(c1b.getDocType() == DOC_COMIC);
   CHECK(same(c1b.getTitle(), c1.getTitle()));
@@ -77,6 +79,7 @@ TEST_CASE("copy constructors") {
 
   
   /* Create copy of magazine */
+  Magazine m1 = Magazine("The New Yorker", 1, 20);
   Magazine m1b = m1;
   CHECK(m1b.getDocType() == DOC_MAGAZINE);
   CHECK(same(m1b.getTitle(), m1.getTitle()));
@@ -95,6 +98,7 @@ TEST_CASE("copy constructors") {
 TEST_CASE("move constructors") {
 
   /* Move a temporary copy of n1 */
+  Novel n1 = Novel("Monstrous Regiment", "Terry Pratchett", 1);
   Novel n1b = n1;
   Novel n1c = std::move(n1b);
 
@@ -103,6 +107,7 @@ TEST_CASE("move constructors") {
   CHECK(same(n1c.getAuthor(), n1.getAuthor()));
 
   /* Move a temporary copy of c1 */
+  Comic c1 = Comic("Watchmen", "Alan Moore", 1, 10);
   Comic c1b = c1;
   Comic c1c = std::move(c1b);
 
@@ -111,6 +116,7 @@ TEST_CASE("move constructors") {
   CHECK(same(c1c.getAuthor(), c1.getAuthor()));
 
   /* Move a temporary copy of m1 */
+  Magazine m1 = Magazine("The New Yorker", 1, 20);
   Magazine m1b = m1;
   Magazine m1c = std::move(m1b);
 
