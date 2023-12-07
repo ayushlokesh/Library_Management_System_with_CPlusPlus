@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 /* The different types of documents stored in the library */
 enum DocType{ DOC_NOVEL, DOC_COMIC, DOC_MAGAZINE };
@@ -7,7 +8,8 @@ enum DocType{ DOC_NOVEL, DOC_COMIC, DOC_MAGAZINE };
 class Document {
 public:
   Document();
-  ~Document();
+  Document(const char* title, const int qty);
+  virtual ~Document();
 
   /* return the document type (abstract method) */
   virtual DocType getDocType() = 0;
@@ -29,14 +31,14 @@ public:
 
   /* Used when someone tries to borrow a document, should return 1 on success
    * and 0 on failure */
-  int borrowDoc();
+  bool borrowDoc();
 
   /* Used when someone returns a document */
   void returnDoc();
 
 protected:
   /* These need to be protected to be inherited by the child classes */
-  char* _title;  // document title
+  std::string _title;  // document title
   int _quantity; // quantity held in the library, should be updated on
                  // borrow (-1) and return (+1)
 
@@ -62,8 +64,8 @@ public:
   ~Novel();
 
   /* virtual function overrides */
-  DocType getDocType();
-  void print();
+  DocType getDocType() override;
+  void print() override;
 
   /* getters and setters */
   void updateAuthor(const char *newAuthor);
@@ -71,7 +73,7 @@ public:
 
 private:
   /* In addition to the base Document's attributes, a novel has an author */
-  char* _author;
+  std::string _author;
 };
 
 class Comic : public Document {
@@ -87,8 +89,8 @@ public:
   ~Comic();
 
   /* virtual function overrides */
-  DocType getDocType();
-  void print();
+  DocType getDocType() override;
+  void print() override;
 
   /* getters, setters */
   void updateAuthor(const char *newAuthor);
@@ -99,7 +101,7 @@ public:
 private:
   /* In addition to the base Document's attributes, a comic has an author as
    * well as an issue number */
-  char* _author;
+  std::string _author;
   int _issue;
 };
 
@@ -116,8 +118,8 @@ public:
   ~Magazine();
 
   /* virtual function overrides */
-  DocType getDocType();
-  void print();
+  DocType getDocType() override;
+  void print() override;
 
   /* getters, setters */
   void updateIssue(int newIssue);
@@ -130,6 +132,7 @@ private:
 };
 
 /* 0ne instance of that class represents a library */
+#include <vector>
 class Library {
 public:
   Library();
@@ -138,7 +141,7 @@ public:
   /* print the entire library on the standard output, one line per document,
    * in the order they were inserted in the library, using the print()
    * methods implemented by the document objects */
-  void print();
+  void print() ;
 
   /* Dump the library in a CSV file. The format is:
    * 1 line per file:
@@ -173,6 +176,5 @@ private:
   /* Array big enough to hold all documents in the library.
    * It's safe to assume that there will never be more than 32K
    * documents in the array.*/
-  Document* _docs[32 * 1024];
-  int _docs_sz;
+  std::vector<Document*>  _docs;
 };
